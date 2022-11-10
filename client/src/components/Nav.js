@@ -14,7 +14,7 @@ const Nav = ({minimal, setShowModal, showModal, setIsSignUp}) => {
                 <img 
                     className="logo" 
                     alt=""
-                    src={minimal ? "https://png.pngitem.com/pimgs/s/242-2424520_johns-hopkins-logo-white-hd-png-download.png" : "https://toppng.com/uploads/preview/tinder-logo-transparent-tinder-logo-11563243301zivc1sx84c.png"}
+                    src={minimal ? "https://media.discordapp.net/attachments/1014217500386394112/1021905307649188000/D9C90488-A9E2-444A-A1DB-EE0C73FE2DC4.png" : "https://media.discordapp.net/attachments/1014217500386394112/1021905307649188000/D9C90488-A9E2-444A-A1DB-EE0C73FE2DC4.png"}
                 />
             </div>
 

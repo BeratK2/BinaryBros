@@ -1,70 +1,115 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TinderCard from "react-tinder-card";
 import ChatContainer from "../components/ChatContainer";
-
-const db = [
-  {
-    name: "Richard Hendricks",
-    url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf24VYVDatsnFhm4pC6X5mnSSjQEjoSFn3Rw&usqp=CAU",
-  },
-  {
-    name: "Erlich Bachman",
-    url: "https://content.presspage.com/uploads/2341/1920_andreas-tostmann.jpg?10000",
-  },
-  {
-    name: "Monica Hall",
-    url: "https://mindbodygreen-res.cloudinary.com/image/upload/c_fill,w_250,h_250,g_face:center,q_85,fl_lossy,f_jpg/usr/SNssZxz.jpg",
-  },
-  {
-    name: "Jared Dunn",
-    url: "https://www.broadwaydancecenter.com/sites/default/files/meta-images/grimes_jared_meta.jpg",
-  },
-  {
-    name: "Dinesh Chugtai",
-    url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6loIwxY5HfwQEX1fA21S5-HbGc2gyfwE_pQ&usqp=CAU",
-  },
-];
+import axios from "axios";
+import {useCookies} from 'react-cookie'
 
 const Dashboard = () => {
-  const characters = db;
-  const [lastDirection, setLastDirection] = useState();
+  const [user, setUser] = useState(null)
+  const [genderedUsers, setGenderedUsers] = useState(null)
+  const [lastDirection, setLastDirection] = useState()
+  const [cookies, setCookie, removeCookie] = useCookies(['user'])
 
-  const swiped = (direction, nameToDelete) => {
-    console.log("removing: " + nameToDelete);
-    setLastDirection(direction);
+  const userId = cookies.UserId
+
+  const getUser = async () => {
+    try{
+      const response = await axios.get('http://localhost:8000/user', {
+        params: {userId}
+      })
+      setUser(response.data)
+
+      console.log('This is the user: ' + user);
+    } catch (err){
+      console.log(err);
+    }
+  }
+
+  const getGenderedUsers = async () => {
+    try{
+      const response = await axios.get('http://localhost:8000/gendered-users',{
+        params: { gender: user?.gender_interest}
+      })
+      setGenderedUsers(response.data)
+    }catch(error){
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getUser()
+  }, [])
+
+  useEffect(() => {
+    if(user){
+      getGenderedUsers()
+    }
+  }, [user])
+
+
+  const updateMatches = async (matchedUserId) => {
+    try{
+      await axios.put('http://localhost:8000/addmatch', {
+        userId,
+        matchedUserId
+      })
+      getUser()
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+  const swiped = (direction, swipedUserId) => {
+    if(direction === 'right'){
+      updateMatches(swipedUserId)
+    }
+    setLastDirection(direction)
   };
 
   const outOfFrame = (name) => {
     console.log(name + " left the screen!");
   };
 
+  const matchedUserIds = user?.matches.map(({user_id}) => user_id).concat(userId)
+
+  const filteredGenderedUsers = genderedUsers?.filter(
+    genderedUser => !matchedUserIds.includes(genderedUser.user_id)
+  )
+
+  console.log('filteredGenderedUsers ', filteredGenderedUsers)
   return (
+    <>
+    { user &&
     <div className="dashboard">
-      <ChatContainer/>
+      <ChatContainer user={user}/>
       <div className="swipe-container">
         <div className="card-container">
-          {characters.map((character) => (
+          
+          {filteredGenderedUsers?.map((genderedUser) =>
             <TinderCard
               className="swipe"
-              key={character.name}
-              onSwipe={(dir) => swiped(dir, character.name)}
-              onCardLeftScreen={() => outOfFrame(character.name)}
+              key={genderedUser.user_id}
+              onSwipe={(dir) => swiped(dir, genderedUser.user_id)}
+              onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}
             >
               <div
-                style={{ backgroundImage: "url(" + character.url + ")" }}
+                style={{ backgroundImage: "url(" + genderedUser.url + ")" }}
                 className="card"
               >
-                <h3>{character.name}</h3>
+                <h3>{genderedUser.first_name}</h3>
               </div>
             </TinderCard>
-          ))}
+          )}
+
           <div className="swipe-info">
-            {lastDirection ? <p>You swiped {lastDirection}</p> : <p>:</p>}
+            {lastDirection ? <p>You swiped {lastDirection}</p> : <p/>}
           </div>
         </div>
       </div>
-    </div>
-  );
-};
+    </div>}
+    </>
+  )
+}
 
 export default Dashboard;

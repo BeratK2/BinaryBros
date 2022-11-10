@@ -1,10 +1,14 @@
 import React, {useState} from "react";
 import Nav from "../components/Nav";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios'
 
 const Onboarding = () => {
 
+  const [cookies, setCookie, removeCookie] = useCookies(null) // changed from ['user']
   const [formData, setFormData] = useState({
-    user_id: "",
+    user_id: cookies.UserId,
     first_name: "",
     dob_day: "",
     dob_month: "",
@@ -12,20 +16,32 @@ const Onboarding = () => {
     show_gender: false,
     gender_identity: "",
     gender_interest: "everyone",
-    email: "",
     url: "",
     about: "",
     matches: []
   })
 
-  const handleSubmit = () => {
-    console.log("submitted");
-  };
+  let navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    console.log("submitted")
+    e.preventDefault()
+    try{
+      const response = await axios.put('http://localhost:8000/user', {formData})
+      const success = response.status === 200
+      if (success) navigate('/dashboard')
+      
+      window.location.reload()
+
+    }catch (err){
+      console.log(err)
+    }
+  }
 
   const handleChange = (e) => {
-    console.log("e", e);
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    const name = e.target.name;
+    console.log('e', e);
+    const value = e.target.type === "checkbox" ? e.target.checked : e.target.value
+    const name = e.target.name
 
     setFormData((prevState) => ({
       ...prevState,
@@ -37,9 +53,16 @@ const Onboarding = () => {
 
   return (
     <>
-      <Nav minimal={true} setShowModal={() => {}} showModal={false} />
+      <Nav 
+        minimal={true} 
+        setShowModal={() => {
+        }} 
+        showModal={false} 
+        />
+
       <div className="onboarding">
         <h2>CREATE ACCOUNT</h2>
+
         <form onSubmit={handleSubmit}>
           <section>
             <label htmlFor="first_name">First Name</label>
@@ -90,8 +113,7 @@ const Onboarding = () => {
                 id="man-gender-identity"
                 type="radio"
                 name="gender_identity"
-                required={true}
-                value={"man"}
+                value="man"
                 onChange={handleChange}
                 checked={formData.gender_identity === "man"}
               />
@@ -101,8 +123,7 @@ const Onboarding = () => {
                 id="woman-gender-identity"
                 type="radio"
                 name="gender_identity"
-                required={true}
-                value={"woman"}
+                value="woman"
                 onChange={handleChange}
                 checked={formData.gender_identity === "woman"}
               />
@@ -112,8 +133,7 @@ const Onboarding = () => {
                 id="more-gender-identity"
                 type="radio"
                 name="gender_identity"
-                required={true}
-                value={"more"}
+                value="more"
                 onChange={handleChange}
                 checked={formData.gender_identity === "more"}
               />
@@ -125,20 +145,18 @@ const Onboarding = () => {
               id="show-gender"
               type="checkbox"
               name="show_gender"
-              required={true}
-              value={"more"}
               onChange={handleChange}
               checked={formData.show_gender}
             />
 
             <label>Show Me</label>
+
             <div className="multiple-input-container">
               <input
                 id="man-gender-interest"
                 type="radio"
                 name="gender_interest"
-                required={true}
-                value={"man"}
+                value="man"
                 onChange={handleChange}
                 checked={formData.gender_interest === "man"}
               />
@@ -148,8 +166,7 @@ const Onboarding = () => {
                 id="woman-gender-interest"
                 type="radio"
                 name="gender_interest"
-                required={true}
-                value={"woman"}
+                value="woman"
                 onChange={handleChange}
                 checked={formData.gender_interest === "woman"}
               />
@@ -159,8 +176,7 @@ const Onboarding = () => {
                 id="everyone-gender-interest"
                 type="radio"
                 name="gender_interest"
-                required={true}
-                value={"everyone"}
+                value="everyone"
                 onChange={handleChange}
                 checked={formData.gender_interest === "everyone"}
               />
@@ -181,16 +197,16 @@ const Onboarding = () => {
           </section>
 
           <section>
-            <label htmlFor="">Profile Photos</label>
+            <label htmlFor="url">Profile Photos</label>
             <input
-              id="url;"
+              id="url"
               type="url"
               name="url"
-              required={true}
               onChange={handleChange}
+              required={true}
             />
             <div className="photo-container">
-              <img src={formData.url} alt="profile pic preview"/>
+              {formData.url && <img src={formData.url} alt="profile pic preview"/>} 
             </div>
           </section>
         </form>

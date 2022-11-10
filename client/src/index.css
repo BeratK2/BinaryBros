@@ -18,17 +18,17 @@ h2{
 }
 
 .primary-button {
-    color: #fff;
+    color: rgb(255, 255, 255);
     text-transform: uppercase;
     font-size: 15px;
-    background: linear-gradient(45deg, #fe3072, #ff5940);
+    background: linear-gradient(45deg, #3078fe, #ff5940);
     padding: 12px 30px;
     border-radius: 30px;
     border: none;
 }
 
 .primary-button:hover{
-    background: linear-gradient(260deg, #fe3072, #ff5940);
+    background: linear-gradient(45deg, #ff5940, #3078fe);
 }
 
 .secondary-button {
@@ -56,15 +56,21 @@ nav {
 }
 
 nav .nav-button {
-    color: rgb(254, 48, 114);
-    background-color: white;
+    color: #ff5940;
+    background-color: rgba(83, 82, 82, 0.5);
     font-size: 20px;
     padding: 10px 20px;
     border-radius: 10px;
     border: none;
     margin: 10px;
     height: 100px;
+    border-radius: 30px;
+    border: solid 2px #ff5940;
 }
+
+nav .nav-button:hover{
+    color: #3078fee8;
+    border: solid 2px #3078fee8;}
 
 nav .logo-container{
     width: 170px;
@@ -76,7 +82,7 @@ nav .logo-container .logo{
 }
 
 nav .nav-button:disabled{
-    background-color: rgb(189, 180, 180);
+    background-color: #ff5940;
     color: rgb(189, 38, 75);
 }
 

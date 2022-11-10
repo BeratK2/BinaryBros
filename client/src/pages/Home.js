@@ -1,15 +1,21 @@
-import React, { useState } from "react";
-import Nav from "../components/Nav";
-import AuthModal from "../components/AuthModal";
+import React, { useState } from "react"
+import Nav from "../components/Nav"
+import AuthModal from "../components/AuthModal"
+import { useCookies } from "react-cookie"
 
 const Home = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(true);
-
-  const authToken = false;
+  const [showModal, setShowModal] = useState(false)
+  const [isSignUp, setIsSignUp] = useState(true)
+  const [cookies, setCookie, removeCookie] = useCookies(['user'])
+  const authToken = cookies.AuthToken
 
   const handleClick = () => {
-    console.log("Clicked");
+    if(authToken){
+      removeCookie('UserId', cookies.UserId)
+      removeCookie('AuthToken', cookies.AuthToken)
+      window.location.reload()
+      return
+    }
     setShowModal(true);
     setIsSignUp(true);
   };
@@ -24,7 +30,7 @@ const Home = () => {
         setIsSignUp={setIsSignUp}
       />
       <div className="home">
-        <h1 className="primary-title">Swipe Right</h1>
+        <h1 className="primary-title">Home Sweet Home!</h1>
         <button className="primary-button" onClick={handleClick}>
           {authToken ? "Signout" : "Create Account"}
         </button>
@@ -32,13 +38,12 @@ const Home = () => {
         {showModal && (
           <AuthModal
             setShowModal={setShowModal}
-            setIsSignUp={setIsSignUp}
             isSignUp={isSignUp}
           />
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default Home;
