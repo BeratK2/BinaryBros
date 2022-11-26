@@ -60,6 +60,8 @@ const Dashboard = () => {
     }
   }
 
+  console.log(user);
+
   const swiped = (direction, swipedUserId) => {
     if(direction === 'right'){
       updateMatches(swipedUserId)
