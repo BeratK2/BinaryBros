@@ -3,9 +3,11 @@ import Nav from "../components/Nav";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
+import schools from "../Schools";
 
 const Onboarding = () => {
 
+  console.log(schools);
   const [cookies, setCookie, removeCookie] = useCookies(null) // changed from ['user']
   const [formData, setFormData] = useState({
     user_id: cookies.UserId,
@@ -14,10 +16,11 @@ const Onboarding = () => {
     dob_month: "",
     dob_year: "",
     show_gender: false,
-    gender_identity: "",
+    gender_identity: "",  
     gender_interest: "everyone",
     url: "",
     about: "",
+    school: "",
     matches: []
   })
 
@@ -39,7 +42,6 @@ const Onboarding = () => {
   }
 
   const handleChange = (e) => {
-    console.log('e', e);
     const value = e.target.type === "checkbox" ? e.target.checked : e.target.value
     const name = e.target.name
 
@@ -48,8 +50,6 @@ const Onboarding = () => {
       [name] : value
     }))
   };
-
-  console.log(formData);
 
   return (
     <>
@@ -193,6 +193,25 @@ const Onboarding = () => {
               value={formData.about}
               onChange={handleChange}
             />
+            
+            <label htmlFor="school">What school will you be attending</label>
+            <input
+              id="school"
+              name="school"
+              type="text"
+              list="school-list"
+              required={true}
+              placeholder="Choose your school here"
+              value={formData.school}
+              onChange={handleChange}
+            /> 
+
+            <datalist id="school-list">
+                {schools.map((school)  => (
+                  <option value={school}></option>
+                ))}
+            </datalist>
+  
             <input type="submit" />
           </section>
 

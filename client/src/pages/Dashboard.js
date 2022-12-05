@@ -27,8 +27,8 @@ const Dashboard = () => {
 
   const getGenderedUsers = async () => {
     try{
-      const response = await axios.get('http://localhost:8000/gendered-users',{
-        params: { gender: user?.gender_interest}
+      const response = await axios.get('http://localhost:8000/school-users',{
+        params: { school: user?.school}
       })
       setGenderedUsers(response.data)
     }catch(error){

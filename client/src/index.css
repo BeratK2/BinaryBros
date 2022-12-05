@@ -9,26 +9,38 @@ h2{
 }
 
 *{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 .primary-title {
     font-size: 90px;
+    font-weight: 250;
     color: white;
+    animation: fadeIn 5s;
+    -webkit-filter: drop-shadow(5px 5px 5px #000000);
+        filter: drop-shadow(5px 5px 5px #000000);
 }
 
 .primary-button {
     color: rgb(255, 255, 255);
     text-transform: uppercase;
-    font-size: 15px;
-    background: linear-gradient(45deg, #3078fe, #ff5940);
+    font-size: 30px;
+    background: linear-gradient(45deg, #05abc4, #2479a5);
     padding: 12px 30px;
     border-radius: 30px;
     border: none;
+    -webkit-filter: drop-shadow(5px 5px 5px #000000);
+        filter: drop-shadow(5px 5px 5px #000000);
 }
 
 .primary-button:hover{
-    background: linear-gradient(45deg, #ff5940, #3078fe);
+    cursor: pointer;
+    background: linear-gradient(45deg, #2479a5, #05abc4);
 }
 
 .secondary-button {
@@ -38,13 +50,17 @@ h2{
     font-size: 15px;
     text-transform: uppercase;
     padding: 12px 30px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 125px;
     border-radius: 30px;
-    border: solid 2px rgb(121, 119, 119)
+    border: solid 2px rgb(121, 119, 119);
 }
 
 .secondary-button:hover{
     color: rgb(48,48,48);
     border: solid 2px rgb(48,48,48);
+    cursor: pointer;
 }
 
 /*---- Navbar -----*/
@@ -56,25 +72,28 @@ nav {
 }
 
 nav .nav-button {
-    color: #ff5940;
-    background-color: rgba(83, 82, 82, 0.5);
+    color: white;
+    -webkit-filter: drop-shadow(5px 5px 5px #000000);
+        filter: drop-shadow(5px 5px 5px #000000);
+    background-color: #05abc4;
     font-size: 20px;
-    padding: 10px 20px;
     border-radius: 10px;
     border: none;
     margin: 10px;
-    height: 100px;
-    border-radius: 30px;
-    border: solid 2px #ff5940;
+    height: 45px;
+    border-radius: 20px;
+    border: solid 2px white;
+    text-transform: uppercase;
 }
 
 nav .nav-button:hover{
-    color: #3078fee8;
-    border: solid 2px #3078fee8;}
+    color: #1d525d;
+    border: solid 2px #1d525d;
+    cursor: pointer;
+}
 
 nav .logo-container{
-    width: 170px;
-    margin: 15px;
+    margin: auto;
 }
 
 nav .logo-container .logo{
@@ -82,10 +101,9 @@ nav .logo-container .logo{
 }
 
 nav .nav-button:disabled{
-    background-color: #ff5940;
-    color: rgb(189, 38, 75);
+    cursor: not-allowed;
+    opacity: 0.6;
 }
-
 
 /*---- Home Page -----*/
 .overlay{
@@ -94,8 +112,8 @@ nav .nav-button:disabled{
     position: fixed;
     background: linear-gradient(
         to bottom,
-        rgba(0,0,0, 0.65) 0%,
-        rgba(0,0,0,0) 100%
+        rgb(0,0,0, 0.65) 0%,
+        rgb(0,0,0,0) 100%
     ), url('https://global.discourse-cdn.com/pocketgems/uploads/episodeinteractive/original/4X/a/7/2/a721f274da3d400d14a5f8c9c88653e49a0b05b9.jpeg')
 }
 
@@ -103,22 +121,32 @@ nav .nav-button:disabled{
     margin-top: 30px;
 }
 
+img.logo{
+    margin-left: 525px;
+    -webkit-filter: drop-shadow(5px 5px 5px #000000);
+        filter: drop-shadow(5px 5px 5px #000000);
+}
+
 /*---- Auth Modal -----*/
 .auth-modal {
+    animation: zoomIn 2s;
     position: absolute;
     left: 0;
     right: 0;
     top: 100px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
     max-width: 360px;
-    height: 600px;
-    background-color: white;
+    height: 400px;
+    background-color: #05abc4;
     border-radius: 10px;
     padding: 40px;
+    background: linear-gradient(#05abc4, #2479a5);
+    color: white;
+    text-transform: uppercase;
 }
 
 .auth-modal .close-icon {
+    cursor: pointer;
     float: right;
 }
 

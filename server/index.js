@@ -161,20 +161,22 @@ app.get("/users", async (req, res) => {
 });
 
 //Route to get filtered users
-app.get("/gendered-users", async (req, res) => {
+app.get("/school-users", async (req, res) => {
   const client = new MongoClient(uri);
-  const gender = req.query.gender;
+  const mySchool = req.query.school;
 
   try {
     //Connect to database and assign users to a variable
     await client.connect();
     const database = client.db("app-data");
     const users = database.collection("users");
-    const query = { gender_identity: { $eq: gender } };
+    const query = { school: { $eq: mySchool } };
     const foundUsers = await users.find(query).toArray();
 
     //Get all users and return them as an array
     res.json(foundUsers);
+
+    console.log(foundUsers);
   } finally {
     await client.close();
   }
@@ -203,6 +205,7 @@ app.put("/user", async (req, res) => {
         url: formData.url,
         about: formData.about,
         matches: formData.matches,
+        school: formData.school
       },
     };
 
