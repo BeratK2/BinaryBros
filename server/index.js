@@ -3,11 +3,11 @@ const express = require("express");
 const { MongoClient } = require("mongodb");
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
+require("dotenv").config()
 const uri =
-  "mongodb+srv://BinaryBros:HkdtOWtyVfRYCua4@cluster0.swk6gwr.mongodb.net/?retryWrites=true&w=majority";
+ process.env.URI;
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -66,6 +66,8 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+
+//Login route
 app.post("/login", async (req, res) => {
   const client = new MongoClient(uri);
   const { email, password } = req.body;
@@ -95,6 +97,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
+
 // Get individual User
 app.get("/user", async (req, res) => {
   const client = new MongoClient(uri);
@@ -113,6 +116,8 @@ app.get("/user", async (req, res) => {
   }
 });
 
+
+//Add match to user's array
 app.put("/addmatch", async (req, res) => {
   const client = new MongoClient(uri);
   const { userId, matchedUserId } = req.body;
@@ -134,6 +139,8 @@ app.put("/addmatch", async (req, res) => {
   }
 });
 
+
+//Get users
 app.get("/users", async (req, res) => {
   const client = new MongoClient(uri);
   const userIds = JSON.parse(req.query.userIds);
@@ -160,7 +167,7 @@ app.get("/users", async (req, res) => {
   }
 });
 
-//Route to get filtered users
+//Route to get filtered users by school
 app.get("/school-users", async (req, res) => {
   const client = new MongoClient(uri);
   const mySchool = req.query.school;
@@ -182,6 +189,8 @@ app.get("/school-users", async (req, res) => {
   }
 });
 
+
+//Update user details 
 app.put("/user", async (req, res) => {
   const client = new MongoClient(uri);
   const formData = req.body.formData;
@@ -217,6 +226,8 @@ app.put("/user", async (req, res) => {
   }
 });
 
+
+//Get messages based on corresponding user
 app.get("/messages", async (req, res) => {
   const { userId, correspondingUserId } = req.query;
   const client = new MongoClient(uri);
@@ -237,6 +248,8 @@ app.get("/messages", async (req, res) => {
   }
 });
 
+
+//Create a new message
 app.post('/message', async (req, res) => {
     const client = new MongoClient(uri)
     const message = req.body.message
